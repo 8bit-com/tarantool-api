@@ -1,0 +1,76 @@
+---
+replicasets:
+  3e2998b8-680b-4867-beaf-5b146a6df99c:
+    weight: 0
+    master:
+    - 2a4c14de-3c15-4817-892c-7a82764fe773
+    alias: router
+    roles:
+      app.roles.api: true
+      ddl-manager: true
+      failover-coordinator: true
+      vshard-router: true
+      metrics: true
+      crud-router: true
+    all_rw: false
+  02811116-64f8-497c-bbf9-3a9b8ede17b6:
+    weight: 1
+    master:
+    - cb177242-cdba-4a60-af77-3508d6372ab0
+    - 25b736dc-13b4-405b-882f-0d4874ad1cec
+    alias: s-1
+    vshard_group: default
+    roles:
+      ddl-manager: true
+      app.roles.storage: true
+      crud-storage: true
+      metrics: true
+      vshard-storage: true
+    all_rw: false
+  84bace1f-0d9d-498d-8f59-d7ebc77bdda7:
+    weight: 1
+    master:
+    - 7085ec7a-ce9e-4a4d-9024-67c5c6af576c
+    - 6b6ba868-8e1b-41bd-a9d6-8f2f7e77ad33
+    alias: s-2
+    vshard_group: default
+    roles:
+      ddl-manager: true
+      app.roles.storage: true
+      crud-storage: true
+      metrics: true
+      vshard-storage: true
+    all_rw: false
+servers:
+  7085ec7a-ce9e-4a4d-9024-67c5c6af576c:
+    electable: true
+    replicaset_uuid: 84bace1f-0d9d-498d-8f59-d7ebc77bdda7
+    uri: localhost:3304
+    disabled: false
+  25b736dc-13b4-405b-882f-0d4874ad1cec:
+    electable: true
+    replicaset_uuid: 02811116-64f8-497c-bbf9-3a9b8ede17b6
+    uri: localhost:3303
+    disabled: false
+  cb177242-cdba-4a60-af77-3508d6372ab0:
+    electable: true
+    replicaset_uuid: 02811116-64f8-497c-bbf9-3a9b8ede17b6
+    uri: localhost:3302
+    disabled: false
+  6b6ba868-8e1b-41bd-a9d6-8f2f7e77ad33:
+    electable: true
+    replicaset_uuid: 84bace1f-0d9d-498d-8f59-d7ebc77bdda7
+    uri: localhost:3305
+    disabled: false
+  2a4c14de-3c15-4817-892c-7a82764fe773:
+    electable: true
+    replicaset_uuid: 3e2998b8-680b-4867-beaf-5b146a6df99c
+    uri: localhost:3301
+    disabled: false
+failover:
+  tarantool_params:
+    uri: localhost:4401
+    password: passwd
+  mode: stateful
+  state_provider: tarantool
+...
