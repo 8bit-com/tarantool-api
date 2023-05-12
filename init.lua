@@ -38,11 +38,13 @@ local cartridge = require('cartridge')
 
 local ok, err = cartridge.cfg({
     roles = {
-        'cartridge.roles.vshard-storage',
-        'cartridge.roles.vshard-router',
+        'cartridge.roles.crud-storage',
+        'cartridge.roles.crud-router',
         'cartridge.roles.metrics',
-        'app.roles.custom',
+        'app.roles.api',
+        'app.roles.storage',
     },
+    cluster_cookie = 'tarantool-api-cluster-cookie',
 })
 
 assert(ok, tostring(err))
