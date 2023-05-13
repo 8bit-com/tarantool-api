@@ -1,33 +1,33 @@
-2023-05-13 00:48:21.818 [26652] main/103/stateboard.init.lua I> Tarantool 2.10.6-0-g3990f976b Linux-x86_64-RelWithDebInfo
-2023-05-13 00:48:21.818 [26652] main/103/stateboard.init.lua I> log level 5
-2023-05-13 00:48:21.818 [26652] main/103/stateboard.init.lua I> wal/engine cleanup is paused
-2023-05-13 00:48:21.818 [26652] main/103/stateboard.init.lua I> mapping 268435456 bytes for memtx tuple arena...
-2023-05-13 00:48:21.818 [26652] main/103/stateboard.init.lua I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274
-2023-05-13 00:48:21.818 [26652] main/103/stateboard.init.lua I> mapping 134217728 bytes for vinyl tuple arena...
-2023-05-13 00:48:21.819 [26652] main/103/stateboard.init.lua I> update replication_synchro_quorum = 1
-2023-05-13 00:48:21.819 [26652] main/103/stateboard.init.lua I> instance uuid 6a6fd68e-49c0-4b71-a82d-f8e4e9993118
-2023-05-13 00:48:21.819 [26652] main/103/stateboard.init.lua I> initializing an empty data directory
-2023-05-13 00:48:21.830 [26652] main/103/stateboard.init.lua I> assigned id 1 to replica 6a6fd68e-49c0-4b71-a82d-f8e4e9993118
-2023-05-13 00:48:21.830 [26652] main/103/stateboard.init.lua I> update replication_synchro_quorum = 1
-2023-05-13 00:48:21.830 [26652] main/103/stateboard.init.lua I> cluster uuid 6cd9c9d0-65df-4289-ac78-8865205aacbf
-2023-05-13 00:48:21.830 [26652] snapshot/101/main I> saving snapshot `./00000000000000000000.snap.inprogress'
-2023-05-13 00:48:21.833 [26652] snapshot/101/main I> done
-2023-05-13 00:48:21.833 [26652] main/103/stateboard.init.lua I> RAFT: fencing enabled
-2023-05-13 00:48:21.833 [26652] main/103/stateboard.init.lua I> ready to accept requests
-2023-05-13 00:48:21.833 [26652] main/104/gc I> wal/engine cleanup is resumed
-2023-05-13 00:48:21.833 [26652] main/103/stateboard.init.lua I> set 'log_level' configuration option to 5
-2023-05-13 00:48:21.833 [26652] main/105/checkpoint_daemon I> scheduled next checkpoint for Sat May 13 02:30:24 2023
-2023-05-13 00:48:21.833 [26652] main/103/stateboard.init.lua I> set 'log_format' configuration option to "plain"
-2023-05-13 00:48:21.834 [26652] main/118/console/unix/:/home/vladimir/tarantool-api/tmp/run/tarantool-api-stateboard.control I> started
-2023-05-13 00:48:21.838 [26652] main/103/stateboard.init.lua I> tx_binary: bound to 127.0.0.1:4401
-2023-05-13 00:48:21.838 [26652] main/103/stateboard.init.lua I> set 'listen' configuration option to "localhost:4401"
-2023-05-13 00:48:21.838 [26652] main I> entering the event loop
-2023-05-13 00:48:33.852 [26652] main I> Replicaset 02811116-64f8-497c-bbf9-3a9b8ede17b6: new vclockkeeper cb177242-cdba-4a60-af77-3508d6372ab0
-2023-05-13 00:48:33.852 [26652] main I> Replicaset 84bace1f-0d9d-498d-8f59-d7ebc77bdda7: new vclockkeeper 7085ec7a-ce9e-4a4d-9024-67c5c6af576c
-2023-05-13 00:48:33.853 [26652] main/123/main I> Long live the coordinator "localhost:3301" (2a4c14de-3c15-4817-892c-7a82764fe773)!
-2023-05-13 00:48:33.853 [26652] main I> Replicaset 3e2998b8-680b-4867-beaf-5b146a6df99c: new vclockkeeper 2a4c14de-3c15-4817-892c-7a82764fe773 (forceful)
-2023-05-13 00:48:33.854 [26652] main I> Replicaset 3e2998b8-680b-4867-beaf-5b146a6df99c: new leader 2a4c14de-3c15-4817-892c-7a82764fe773
-2023-05-13 00:48:33.854 [26652] main I> Replicaset 02811116-64f8-497c-bbf9-3a9b8ede17b6: new leader cb177242-cdba-4a60-af77-3508d6372ab0
-2023-05-13 00:48:33.854 [26652] main I> Replicaset 84bace1f-0d9d-498d-8f59-d7ebc77bdda7: new leader 7085ec7a-ce9e-4a4d-9024-67c5c6af576c
-2023-05-13 00:49:20.728 [26652] main C> got signal 15 - Terminated
-2023-05-13 00:49:20.729 [26652] main/139/iproto.shutdown I> tx_binary: stopped
+2023-05-13 06:39:07.943 [9535] main/103/stateboard.init.lua I> Tarantool 2.10.6-0-g3990f976b Linux-x86_64-RelWithDebInfo
+2023-05-13 06:39:07.943 [9535] main/103/stateboard.init.lua I> log level 5
+2023-05-13 06:39:07.943 [9535] main/103/stateboard.init.lua I> wal/engine cleanup is paused
+2023-05-13 06:39:07.943 [9535] main/103/stateboard.init.lua I> mapping 268435456 bytes for memtx tuple arena...
+2023-05-13 06:39:07.943 [9535] main/103/stateboard.init.lua I> Actual slab_alloc_factor calculated on the basis of desired slab_alloc_factor = 1.044274
+2023-05-13 06:39:07.944 [9535] main/103/stateboard.init.lua I> mapping 134217728 bytes for vinyl tuple arena...
+2023-05-13 06:39:07.946 [9535] main/103/stateboard.init.lua I> update replication_synchro_quorum = 1
+2023-05-13 06:39:07.946 [9535] main/103/stateboard.init.lua I> instance uuid 802bdaf2-a790-44d4-860c-f5478c13030d
+2023-05-13 06:39:07.946 [9535] main/103/stateboard.init.lua I> initializing an empty data directory
+2023-05-13 06:39:07.957 [9535] main/103/stateboard.init.lua I> assigned id 1 to replica 802bdaf2-a790-44d4-860c-f5478c13030d
+2023-05-13 06:39:07.957 [9535] main/103/stateboard.init.lua I> update replication_synchro_quorum = 1
+2023-05-13 06:39:07.957 [9535] main/103/stateboard.init.lua I> cluster uuid 8dc2984f-6713-42c2-994e-5aa7ed8815ea
+2023-05-13 06:39:07.957 [9535] snapshot/101/main I> saving snapshot `./00000000000000000000.snap.inprogress'
+2023-05-13 06:39:07.961 [9535] snapshot/101/main I> done
+2023-05-13 06:39:07.961 [9535] main/103/stateboard.init.lua I> RAFT: fencing enabled
+2023-05-13 06:39:07.961 [9535] main/103/stateboard.init.lua I> ready to accept requests
+2023-05-13 06:39:07.961 [9535] main/104/gc I> wal/engine cleanup is resumed
+2023-05-13 06:39:07.961 [9535] main/103/stateboard.init.lua I> set 'log_level' configuration option to 5
+2023-05-13 06:39:07.961 [9535] main/105/checkpoint_daemon I> scheduled next checkpoint for Sat May 13 08:37:13 2023
+2023-05-13 06:39:07.962 [9535] main/103/stateboard.init.lua I> set 'log_format' configuration option to "plain"
+2023-05-13 06:39:07.962 [9535] main/118/console/unix/:/home/vladimir/tarantool-api/tmp/run/tarantool-api-stateboard.control I> started
+2023-05-13 06:39:07.966 [9535] main/103/stateboard.init.lua I> tx_binary: bound to 127.0.0.1:4401
+2023-05-13 06:39:07.966 [9535] main/103/stateboard.init.lua I> set 'listen' configuration option to "localhost:4401"
+2023-05-13 06:39:07.966 [9535] main I> entering the event loop
+2023-05-13 06:39:44.236 [9535] main I> Replicaset c329ff83-f33b-4cea-b4e7-9e0ea606f3c6: new vclockkeeper 1444013e-ab62-4a33-bf37-9e0eef535d14
+2023-05-13 06:39:44.236 [9535] main I> Replicaset 07fe9661-37d9-4b14-9c90-ceaea8227b81: new vclockkeeper 5458090c-a9e1-4fbb-b0d4-9ee1dca943c7
+2023-05-13 06:39:44.238 [9535] main/125/main I> Long live the coordinator "localhost:3301" (51ca78ac-54c2-4267-bb1b-58b4ddd32499)!
+2023-05-13 06:39:44.239 [9535] main I> Replicaset fa0b8c75-b4c6-4676-9dbf-2c19ca12dbf7: new vclockkeeper 51ca78ac-54c2-4267-bb1b-58b4ddd32499 (forceful)
+2023-05-13 06:39:44.239 [9535] main I> Replicaset fa0b8c75-b4c6-4676-9dbf-2c19ca12dbf7: new leader 51ca78ac-54c2-4267-bb1b-58b4ddd32499
+2023-05-13 06:39:44.239 [9535] main I> Replicaset 07fe9661-37d9-4b14-9c90-ceaea8227b81: new leader 5458090c-a9e1-4fbb-b0d4-9ee1dca943c7
+2023-05-13 06:39:44.239 [9535] main I> Replicaset c329ff83-f33b-4cea-b4e7-9e0ea606f3c6: new leader 1444013e-ab62-4a33-bf37-9e0eef535d14
+2023-05-13 06:40:34.373 [9535] main C> got signal 15 - Terminated
+2023-05-13 06:40:34.374 [9535] main/140/iproto.shutdown I> tx_binary: stopped

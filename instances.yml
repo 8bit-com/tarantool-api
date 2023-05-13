@@ -1,23 +1,23 @@
 ---
 tarantool-api.router:
   advertise_uri: localhost:3301
-  http_port: 8081
+  http_port: 8091
 
 tarantool-api.s1-master:
   advertise_uri: localhost:3302
-  http_port: 8082
+  http_port: 8092
 
 tarantool-api.s1-replica:
   advertise_uri: localhost:3303
-  http_port: 8083
+  http_port: 8093
 
 tarantool-api.s2-master:
   advertise_uri: localhost:3304
-  http_port: 8084
+  http_port: 8094
 
 tarantool-api.s2-replica:
   advertise_uri: localhost:3305
-  http_port: 8085
+  http_port: 8095
 
 tarantool-api-stateboard:
   listen: localhost:4401

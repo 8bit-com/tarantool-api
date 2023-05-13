@@ -6,11 +6,24 @@ local tnt_kafka = require('kafka')
 local json = require('json')
 local datetime = require('datetime')
 local fiber = require 'fiber'
+local uuid = require('uuid')
+local producer = tnt_kafka.Producer.create({ brokers = "localhost:9092" })
+
+local function findAll()
+    local message, err = crud.select('smev_message_recived', nil, {fullscan = true})
+    if err ~= nil then
+        log.info(err)
+    end
+    message = crud.unflatten_rows(message.rows, message.metadata)
+    log.info("findAll()")
+    return json.encode(message)
+end
 
 -- Вернуть true если в smev_message_recived найдено сообщение
 -- в где message_id = messageId, иначе false
 local function checkExistSMEVMessage(messageId)
     local msg = crud.get('smev_message_recived', messageId)
+    log.info("checkExistSMEVMessage()")
     if msg ~= nil then
         return true
     else
@@ -18,18 +31,66 @@ local function checkExistSMEVMessage(messageId)
     end
 end
 
-local function saveSMEVMessage(data)
-    local cluster_config = cartridge.config_get_deepcopy()
-    local hello_section = cluster_config['api']
-    local kafka_port = hello_section['kafka_port']
-    local producer, err = tnt_kafka.Producer.create({ brokers = kafka_port })
+local function send_kafka_bft_smev(message_id)
+    local msg, err = crud.select('smev_message_recived', {{'=', 'message_id', message_id}})
     if err ~= nil then
         log.info(err)
-        os.exit(1)
     end
+    msg = crud.unflatten_rows(msg.rows, msg.metadata)
+    local msg = { messageId = msg[1].message_id, ack_priority = msg[1].ack_priority }
+    msg = json.encode(msg)
+    local err = producer:produce_async({
+        topic = "bft_smev_adapter_ack_service",
+        value = msg
+    })
+    if err ~= nil then
+        log.info("got error '%s' while sending value", err)
+    else
+        log.info("successfully sent value to kafka")
+    end
+end
 
-    log.info(data)
+local function send_kafka_processing(message_id)
+    local msg, err = crud.select('smev_message_recived', {{'=', 'message_id', message_id}})
+    if err ~= nil then
+        log.info(err)
+    end
+    msg = crud.unflatten_rows(msg.rows, msg.metadata)
+    local msg = { messageId = msg[1].message_id, smevNamespace = msg[1].smev_namespace,
+                  smevXmlGuid = msg[1].smev_xml_guid, attachmentGuids = msg[1].attachment_guids }
+    msg = json.encode(msg)
+    local err = producer:produce_async({
+        topic = "processing_topic_name",
+        value = msg
+    })
+    if err ~= nil then
+        log.info("got error '%s' while sending value", err)
+    else
+        log.info("successfully sent to kafka")
+    end
+end
 
+local function send_kafka_bft_smev_adapter_iis_router_service(id)
+    local msg, err = crud.select('smev_message_to_iis', {{'=', 'id', id}})
+    if err ~= nil then
+        log.info(err)
+    end
+    msg = crud.unflatten_rows(msg.rows, msg.metadata)
+    local msg = { messageId = msg[1].parent_message_id, smevNamespace = msg[1].smev_namespace,
+                  iisXmlGuid = msg[1].iis_xml_guid }
+    msg = json.encode(msg)
+    local err = producer:produce_async({
+        topic = "bft_smev_adapter_iis_router_service",
+        value = msg
+    })
+    if err ~= nil then
+        log.info("got error '%s' while sending value", err)
+    else
+        log.info("successfully sent to kafka")
+    end
+end
+
+local function saveSMEVMessage(data)
     -- В smev_message_recived вставляются данные:
     -- message_id = messageId, smev_namespace = smevNamespace,
     -- smev_xml_guid = smevXmlGuid, attachment_guids = attachmentGuids,
@@ -80,30 +141,12 @@ local function saveSMEVMessage(data)
     -- В топик bft_smev_adapter_ack_service отправляется сообщения в JSON
     -- со значениями из smev_message_recived для строки где message_id = messageId:
     -- { messageId = message_id, ack_priority = ack_priority }
-    local msg, err = crud.select('smev_message_recived', {{'=', 'message_id', data['message_id']}})
-    if err ~= nil then
-        log.info(err)
-    end
-    msg = crud.unflatten_rows(msg.rows, msg.metadata)
-    log.info(msg)
-    local msg = { messageId = msg[1].message_id, ack_priority = msg[1].ack_priority }
-    msg = json.encode(msg)
-    local err = producer:produce_async({
-        topic = "bft_smev_adapter_ack_service",
-        value = msg
-    })
-    if err ~= nil then
-        log.info(string.format("got error '%s' while sending value '%s'", err, msg))
-    else
-        log.info("successfully sent value '%s'", msg)
-    end
-
-    local date = datetime.parse(os.date("!%Y-%m-%dT%H:%M:%SZ", fiber.time()))
+    send_kafka_bft_smev(data['message_id'])
 
     -- В smev_message_recived для сообщения где messageId = message_Id в
     -- start_ack_send_date записывается текущее датавремя
+    local date = datetime.parse(os.date("!%Y-%m-%dT%H:%M:%SZ", fiber.time()))
     local _, err = crud.update('smev_message_recived', data['message_id'], {{'=', 'start_ack_send_date', date}})
-
     if err ~= nil then
         log.info(err)
     end
@@ -113,64 +156,49 @@ local function saveSMEVMessage(data)
     -- из smev_message_recived:
     -- { messageId = message_id, smevNamespace = smev_namespace,
     -- smevXmlGuid = smev_xml_guid, attachmentGuids = attachment_guids }
-    local msg, err = crud.select('smev_message_recived',
-        {{'=', 'message_id', data['message_id']}})
-    if err ~= nil then
-        log.info(err)
-    end
-    msg = crud.unflatten_rows(msg.rows, msg.metadata)
-    local msg = { messageId = msg[1].message_id, smevNamespace = msg[1].smev_namespace,
-                  smevXmlGuid = msg[1].smev_xml_guid, attachmentGuids = msg[1].attachment_guids }
-    msg = json.encode(msg)
-    local err = producer:produce_async({
-        topic = "processing_topic_name",
-        value = msg
-    })
-    if err ~= nil then
-        log.info(string.format("got error '%s' while sending value '%s'", err, msg))
-    else
-        log.info(string.format("successfully sent value '%s'", msg))
-    end
-
-    local date = datetime.parse(os.date("!%Y-%m-%dT%H:%M:%SZ", fiber.time()))
+    send_kafka_processing(data['message_id'])
 
     -- В smev_message_recived для сообщения где messageId = message_Id
     -- в start_processing_date записывается текущее датавремя
+    local date = datetime.parse(os.date("!%Y-%m-%dT%H:%M:%SZ", fiber.time()))
     local _, err = crud.update('smev_message_recived', data['message_id'], {{'=', 'start_processing_date', date}})
-
     if err ~= nil then
         log.info(err)
     end
+    log.info("saveSMEVMessage()")
 end
 
 -- В iis_message_to_smev для сообщения где messageId = message_id
 -- в smev_request_xml_guid записывается saveSMEVRequest
 local function saveSMEVRequest(data)
     local _, err = crud.update('iis_message_to_smev', data['message_id'],
-        {{'=', 'smev_request_xml_guid', data['xmlRef']}})
+                                {{'=', 'smev_request_xml_guid', data['smev_request_xml_guid']}})
     if err ~= nil then
         log.info(err)
     end
+    log.info("saveSMEVRequest()")
 end
 
 -- В iis_message_to_smev для сообщения где messageId = message_id
 -- в smev_send_error записывается xml
 local function faultErrorSMEVSending(data)
     local _, err = crud.update('iis_message_to_smev', data['message_id'],
-        {{'=', 'smev_send_error', data['xml']}})
+                                {{'=', 'smev_send_error', data['smev_send_error']}})
     if err ~= nil then
         log.info(err)
     end
+    log.info("faultErrorSMEVSending()")
 end
 
 -- В iis_message_to_smev для сообщения где messageId = message_id
 -- в smev_send_error записывается error
 local function httpErrorSMEVSending(data)
     local _, err = crud.update('iis_message_to_smev', data['message_id'],
-        {{'=', 'smev_send_error', data['error']}})
+                                {{'=', 'smev_send_error', data['smev_send_error']}})
     if err ~= nil then
         log.info(err)
     end
+    log.info("httpErrorSMEVSending()")
 end
 
 -- В iis_message_to_smev для сообщения где
@@ -180,42 +208,46 @@ end
 local function endSMEVSending(data)
     local date = datetime.parse(os.date("!%Y-%m-%dT%H:%M:%SZ", fiber.time()))
     local _, err = crud.update('iis_message_to_smev', data['message_id'],
-        {{'=', 'smev_response_xml_guid', data['xmlRef']},
-         {'=', 'end_send_date', date},
-         {'=', 'smev_send_error', nil},})
+                                {{'=', 'smev_response_xml_guid', data['smev_response_xml_guid']},
+                                {'=', 'end_send_date', date},
+                                {'=', 'smev_send_error', nil},})
     if err ~= nil then
         log.info(err)
     end
+    log.info("endSMEVSending()")
 end
 
 -- В smev_message_recived для сообщения где messageId = message_Id
 -- в ack_request_xml_guid записывается текущее xmlRef
 local function saveAckRequest(data)
     local _, err = crud.update('smev_message_recived', data['message_id'],
-        {{'=', 'ack_request_xml_guid', data['xmlRef']}})
+                                {{'=', 'ack_request_xml_guid', data['ack_request_xml_guid']}})
     if err ~= nil then
         log.info(err)
     end
+    log.info("saveAckRequest()")
 end
 
 -- В smev_message_recived для сообщения где messageId = message_Id
 -- в ack_send_error записывается xml
 local function faultErrorAckSending(data)
     local _, err = crud.update('smev_message_recived', data['message_id'],
-        {{'=', 'ack_send_error', data['xml']}})
+                                {{'=', 'ack_send_error', data['ack_send_error']}})
     if err ~= nil then
         log.info(err)
     end
+    log.info("faultErrorAckSending()")
 end
 
 -- В smev_message_recived для сообщения где messageId = message_Id
 -- в ack_send_error записывается error
 local function httpErrorAckSending(data)
     local _, err = crud.update('smev_message_recived', data['message_id'],
-        {{'=', 'ack_send_error', data['error']}})
+                                {{'=', 'ack_send_error', data['ack_send_error']}})
     if err ~= nil then
         log.info(err)
     end
+    log.info("httpErrorAckSending()")
 end
 
 -- В smev_message_recived для сообщения где messageId = message_Id
@@ -223,15 +255,43 @@ end
 -- записывается текущее дата и время, значение ack_send_error обнуляется
 local function endAckSending(data)
     local date = datetime.parse(os.date("!%Y-%m-%dT%H:%M:%SZ", fiber.time()))
-    local _, err = crud.update('smev_message_recived', data['message_id'],
-        {{'=', 'ack_response_xml_guid', data['xmlRef']},
-         {'=', 'end_ack_send_date', date},
-         {'=', 'ack_send_error', nil},})
+    local _, err = crud.update('smev_message_recived', data['message_id'], {{'=', 'ack_response_xml_guid', data['ack_response_xml_guid']}, {'=', 'end_ack_send_date', date}, {'=', 'ack_send_error', ' '}})
     if err ~= nil then
         log.info(err)
     end
+    log.info("endAckSending()")
 end
 
+local function endSMEVMessageProcessing(data)
+    local id = uuid():str()
+    local _, err = crud.insert('smev_message_to_iis',
+        {
+            -- Идентификатор сообщения
+            id,
+            -- Идентификатор или идентификаторы родительских сообщений полученных из ИИС
+            data['message_id'],
+            -- СМЭВ namespace
+            data['smev_namespace'],
+        })
+    if err ~= nil then
+        log.info(err)
+    end
+
+    -- В топик bft_smev_adapter_iis_router_service отправляется сообщение в JSON со значениями из smev_message_to_iis созданной записи:
+    --{id: id, messageId: parent_message_id, smevNamespace: smev_namespace, iisXmlGuid: iis_xml_guid }
+    send_kafka_bft_smev_adapter_iis_router_service(id)
+
+    -- В таблицу smev_message_to_iis для созданной записи в start_send_date устанавливается текущая дата
+    local date = datetime.parse(os.date("!%Y-%m-%dT%H:%M:%SZ", fiber.time()))
+    local _, err = crud.update('smev_message_to_iis', id, {{'=', 'start_send_date', date}})
+    if err ~= nil then
+        log.info(err)
+    end
+
+    -- В таблицу smev_message_recived для message_id = messageId в end_processing_date устанавливается текущая дата
+
+    log.info("endSMEVMessageProcessing()")
+end
 
 local exported_functions = {
     checkExistSMEVMessage = checkExistSMEVMessage,
@@ -244,6 +304,8 @@ local exported_functions = {
     faultErrorAckSending = faultErrorAckSending,
     httpErrorAckSending = httpErrorAckSending,
     endAckSending = endAckSending,
+    findAll = findAll,
+    endSMEVMessageProcessing = endSMEVMessageProcessing,
 }
 
 local function init(opts)

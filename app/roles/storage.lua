@@ -64,8 +64,8 @@ local function init_spaces()
                 {name = 'parent_message_id', type = 'array', is_nullable=false},
                 -- 	СМЭВ namespace
                 {name = 'smev_namespace', type = 'string', is_nullable=false},
-                -- Тело сообщения после обработки
-                {name = 'body', type = 'varbinary', is_nullable=false},
+                -- Идентификатор в ЭА XML сообщения для отправки в ИИС
+                {name = 'iis_xml_guid', type = 'string', is_nullable=false},
                 -- Дата начала обработки сообщения
                 {name = 'start_send_date', type = 'datetime', is_nullable=true},
                 -- Тело запроса при отправке сообщения
