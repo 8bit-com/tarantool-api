@@ -84,22 +84,22 @@ end
 -- В топик bft_smev_adapter_ack_service отправляется сообщения в JSON со значениями из
 -- smev_message_recived для строки где message_id = messageId:
 -- { messageId = message_id, ack_priority = ack_priority }
-local function checkExistSMEVMessage(messageId)
-    local msg = crud.get('smev_message_recived', messageId)
+local function checkExistSMEVMessage(data)
+    local msg = crud.get('smev_message_recived', data['message_id'])
     log.info("checkExistSMEVMessage()")
     if msg ~= nil then
-        local msg, err = crud.select('smev_message_recived', {{'=', 'message_id', messageId}})
+        local msg, err = crud.select('smev_message_recived', {{'=', 'message_id', data['message_id']}})
         if err ~= nil then
             log.info(err)
         end
         msg = crud.unflatten_rows(msg.rows, msg.metadata)
         local priority = msg[1].ack_priority + 1
-        local _, err = crud.update('smev_message_recived', messageId,
+        local _, err = crud.update('smev_message_recived', data['message_id'],
             {{'=', 'ack_priority', priority}})
         if err ~= nil then
             log.info(err)
         end
-        send_kafka_bft_smev(messageId)
+        send_kafka_bft_smev(data['message_id'])
         return true
     else
         return false
