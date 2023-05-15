@@ -15,20 +15,8 @@ local function findAll()
         log.info(err)
     end
     message = crud.unflatten_rows(message.rows, message.metadata)
-    log.info("findAll()")
+    log.info("findAll!!!()")
     return json.encode(message)
-end
-
--- Вернуть true если в smev_message_recived найдено сообщение
--- в где message_id = messageId, иначе false
-local function checkExistSMEVMessage(messageId)
-    local msg = crud.get('smev_message_recived', messageId)
-    log.info("checkExistSMEVMessage()")
-    if msg ~= nil then
-        return true
-    else
-        return false
-    end
 end
 
 local function send_kafka_bft_smev(message_id)
@@ -90,13 +78,40 @@ local function send_kafka_bft_smev_adapter_iis_router_service(id)
     end
 end
 
+-- Вернуть true если в smev_message_recived найдено сообщение
+-- в где message_id = messageId, иначе false.
+-- Если сообщение найдено, то в smev_message_recived для message_id = messageId значение ack_priority увеличивается на 1
+-- В топик bft_smev_adapter_ack_service отправляется сообщения в JSON со значениями из
+-- smev_message_recived для строки где message_id = messageId:
+-- { messageId = message_id, ack_priority = ack_priority }
+local function checkExistSMEVMessage(messageId)
+    local msg = crud.get('smev_message_recived', messageId)
+    log.info("checkExistSMEVMessage()")
+    if msg ~= nil then
+        local msg, err = crud.select('smev_message_recived', {{'=', 'message_id', messageId}})
+        if err ~= nil then
+            log.info(err)
+        end
+        msg = crud.unflatten_rows(msg.rows, msg.metadata)
+        local priority = msg[1].ack_priority + 1
+        local _, err = crud.update('smev_message_recived', messageId,
+            {{'=', 'ack_priority', priority}})
+        if err ~= nil then
+            log.info(err)
+        end
+        send_kafka_bft_smev(messageId)
+        return true
+    else
+        return false
+    end
+end
+
 local function saveSMEVMessage(data)
     -- В smev_message_recived вставляются данные:
     -- message_id = messageId, smev_namespace = smevNamespace,
     -- smev_xml_guid = smevXmlGuid, attachment_guids = attachmentGuids,
     -- create_date устанавливается текущая дата, smev_message_date = deliveryTimeStamp,
-    -- processing_topic_name = processingTopicName, значение ack_priority увеличивается на 1,
-    -- если было пусто то устанавливается 1
+    -- processing_topic_name = processingTopicName, значение ack_priority устанавливается 1
     local _, err = crud.insert('smev_message_recived',
         {
             -- Идентификатор сообщения полученного из СМЭВ
@@ -171,6 +186,11 @@ end
 -- В iis_message_to_smev для сообщения где messageId = message_id
 -- в smev_request_xml_guid записывается saveSMEVRequest
 local function saveSMEVRequest(data)
+    --local msg, err = crud.select('iis_message_to_smev', {{'=', 'message_id', data['message_id']}})
+    --if err ~= nil then
+    --    log.info(err)
+    --end
+    --msg = crud.unflatten_rows(msg.rows, msg.metadata)
     local _, err = crud.update('iis_message_to_smev', data['message_id'],
                                 {{'=', 'smev_request_xml_guid', data['smev_request_xml_guid']}})
     if err ~= nil then
@@ -264,6 +284,9 @@ end
 
 local function endSMEVMessageProcessing(data)
     local id = uuid():str()
+
+    -- В таблицу smev_message_to_iis добавляются записи: id = генерируется идентификатор,
+    -- parent_message_id = messageId, smev_namespace = smevNamespace, iis_xml_guid = iisXmlGuid
     local _, err = crud.insert('smev_message_to_iis',
         {
             -- Идентификатор сообщения
@@ -272,6 +295,19 @@ local function endSMEVMessageProcessing(data)
             data['message_id'],
             -- СМЭВ namespace
             data['smev_namespace'],
+            -- Идентификатор в ЭА XML сообщения для отправки в ИИС
+            data['iis_xml_guid'],
+            -- Дата начала обработки сообщения
+            nil,
+            -- Тело запроса при отправке сообщения
+            nil,
+            -- Тело ответа
+            nil,
+            -- ?
+            nil,
+            -- Дата окончания обработки сообщения
+            nil,
+
         })
     if err ~= nil then
         log.info(err)
@@ -288,7 +324,14 @@ local function endSMEVMessageProcessing(data)
         log.info(err)
     end
 
-    -- В таблицу smev_message_recived для message_id = messageId в end_processing_date устанавливается текущая дата
+    -- В таблицу smev_message_recived установить end_processing_date = текущая дата, для всех message_id которые есть в массиве data['message_id']
+    local date = datetime.parse(os.date("!%Y-%m-%dT%H:%M:%SZ", fiber.time()))
+    for i, v in ipairs(data['message_id']) do
+        local _, err = crud.update('smev_message_recived', v, {{'=', 'end_processing_date', date}})
+        if err ~= nil then
+            log.info(err)
+        end
+    end
 
     log.info("endSMEVMessageProcessing()")
 end
