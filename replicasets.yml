@@ -4,7 +4,10 @@ router:
   roles:
   - failover-coordinator
   - crud-router
-  - app.roles.api
+  - app.roles.smev_message_recived_api
+  - app.roles.iis_message_to_smev_api
+  - app.roles.iis_message_recived_api
+  - app.roles.smev_message_to_iis_api
   all_rw: false
 s-1:
   instances:

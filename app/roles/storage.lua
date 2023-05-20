@@ -18,6 +18,10 @@ local function init_spaces()
                 {name = 'smev_message_date', type = 'datetime', is_nullable=false},
                 -- ?
                 {name = 'processing_topic_name', type = 'string', is_nullable=false},
+                -- Тип СМЭВ сообщения 1 - Request, 2 - Response
+                {name = 'smev_message_type', type = 'integer', is_nullable=false},
+                -- Заполняется из элемента OriginalMessageId XML СЭМВ для smev_message_type = 2
+                {name = 'original_message_id', type = 'string', is_nullable=true},
                 -- Дата начала обработки сообщения
                 {name = 'start_processing_date', type = 'datetime', is_nullable=true},
                 -- ?
@@ -140,6 +144,10 @@ local function init_spaces()
                 {name = 'smev_namespace', type = 'string', is_nullable=false},
                 -- ?
                 {name = 'body', type = 'varbinary', is_nullable=false},
+                -- Тип СМЭВ сообщения 1 - Request, 2 - Response
+                {name = 'smev_message_type', type = 'integer', is_nullable=false},
+                -- Значение заполняется для smev_message_type = 2, читается из replyTo
+                {name = 'original_message_id', type = 'string', is_nullable=true},
                 -- Дата начала обработки сообщения
                 {name = 'start_send_date', type = 'datetime', is_nullable=true},
                 -- Тело запроса при отправке сообщения
