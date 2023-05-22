@@ -42,6 +42,7 @@ local ok, err = cartridge.cfg({
         'cartridge.roles.crud-router',
         'cartridge.roles.metrics',
         'app.roles.smev_message_recived_api',
+        'app.roles.shared_api',
         'app.roles.iis_message_to_smev_api',
         'app.roles.iis_message_recived_api',
         'app.roles.smev_message_to_iis_api',

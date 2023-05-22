@@ -288,6 +288,21 @@ dependencies = {
          }
       }
    },
+   ["icu-date"] = {
+      ["scm-1"] = {
+         {
+            constraints = {
+               {
+                  op = "==",
+                  version = {
+                     5, 1, string = "5.1"
+                  }
+               }
+            },
+            name = "lua"
+         }
+      }
+   },
    kafka = {
       ["scm-1"] = {
          {
@@ -419,6 +434,10 @@ dependencies = {
                }
             },
             name = "crud"
+         },
+         {
+            constraints = {},
+            name = "icu-date"
          },
          {
             constraints = {
@@ -960,6 +979,15 @@ modules = {
    ["http.server"] = {
       "http/1.4.0-1"
    },
+   ["icu-date.detect_icu_version_suffix"] = {
+      "icu-date/scm-1"
+   },
+   ["icu-date.ffi_cdef"] = {
+      "icu-date/scm-1"
+   },
+   ["icu-date.init"] = {
+      "icu-date/scm-1"
+   },
    ["kafka.init"] = {
       "kafka/scm-1"
    },
@@ -1439,6 +1467,20 @@ repository = {
          }
       }
    },
+   ["icu-date"] = {
+      ["scm-1"] = {
+         {
+            arch = "installed",
+            commands = {},
+            dependencies = {},
+            modules = {
+               ["icu-date.detect_icu_version_suffix"] = "icu-date/detect_icu_version_suffix.lua",
+               ["icu-date.ffi_cdef"] = "icu-date/ffi_cdef.lua",
+               ["icu-date.init"] = "icu-date/init.lua"
+            }
+         }
+      }
+   },
    kafka = {
       ["scm-1"] = {
          {
@@ -1542,13 +1584,14 @@ repository = {
             dependencies = {
                cartridge = "2.7.9-1",
                ["cartridge-cli-extensions"] = "1.1.1-1",
-               checks = "3.2.0-1",
+               checks = "3.1.0-1",
                crud = "1.0.0-1",
                ddl = "1.6.2-1",
                errors = "2.2.1-1",
                ["frontend-core"] = "8.2.1-1",
                graphql = "0.2.0-1",
                http = "1.4.0-1",
+               ["icu-date"] = "scm-1",
                luagraphqlparser = "0.2.0-1",
                membership = "2.4.0-1",
                metrics = "0.16.0-1",

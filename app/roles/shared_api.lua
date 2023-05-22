@@ -4,8 +4,10 @@ local tnt_kafka = require('kafka')
 local json = require('json')
 local datetime = require('datetime')
 local string = require('string')
+local icu_date = require('icu-date')
 
-local producer = tnt_kafka.Producer.create({ brokers = "localhost:9092" })
+local format = icu_date.formats.iso8601()
+local date = icu_date.new({ zone_id = "GMT+3" })
 
 local function map_date(date)
     if date ~= nil then
@@ -18,12 +20,8 @@ local function map_date(date)
 end
 
 local function get_date()
-    local fiber = require 'fiber'
-    local dt = datetime.new {
-        timestamp = fiber.time()+25200,
-        tzoffset  = 420
-    }
-    return dt
+    date:set_millis(icu_date.now())
+    return datetime.parse(date:format(format))
 end
 
 local function send_kafka_bft_smev(message_id)
@@ -34,7 +32,7 @@ local function send_kafka_bft_smev(message_id)
     msg = crud.unflatten_rows(msg.rows, msg.metadata)
     local msg = { messageId = msg[1].message_id, ack_priority = msg[1].ack_priority }
     msg = json.encode(msg)
-    local err = producer:produce_async({
+    local err = _G.producer:produce_async({
         topic = "bft_smev_adapter_ack_service",
         value = msg
     })
@@ -54,7 +52,7 @@ local function send_kafka_processing(message_id)
     local msg = { messageId = msg[1].message_id, smevNamespace = msg[1].smev_namespace,
                   smevXmlGuid = msg[1].smev_xml_guid, attachmentGuids = msg[1].attachment_guids }
     msg = json.encode(msg)
-    local err = producer:produce_async({
+    local err = _G.producer:produce_async({
         topic = "processing_topic_name",
         value = msg
     })
@@ -74,7 +72,7 @@ local function send_kafka_bft_smev_adapter_iis_router_service(id)
     local msg = { messageId = msg[1].parent_message_id, smevNamespace = msg[1].smev_namespace,
                   iisXmlGuid = msg[1].iis_xml_guid }
     msg = json.encode(msg)
-    local err = producer:produce_async({
+    local err = _G.producer:produce_async({
         topic = "bft_smev_adapter_iis_router_service",
         value = msg
     })
@@ -83,6 +81,10 @@ local function send_kafka_bft_smev_adapter_iis_router_service(id)
     else
         log.info("successfully sent to kafka")
     end
+end
+
+local function apply_config(config)
+    rawset(_G, 'producer', tnt_kafka.Producer.create({brokers = config.api.kafka_port}))
 end
 
 local function init(opts)
@@ -105,5 +107,6 @@ return {
     send_kafka_bft_smev = send_kafka_bft_smev,
     send_kafka_processing = send_kafka_processing,
     send_kafka_bft_smev_adapter_iis_router_service = send_kafka_bft_smev_adapter_iis_router_service,
+    apply_config = apply_config,
     dependencies = {'cartridge.roles.crud-router'},
 }

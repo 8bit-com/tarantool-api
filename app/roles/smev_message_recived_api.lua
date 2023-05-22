@@ -104,9 +104,11 @@ local function saveSMEVMessage(data)
     -- { messageId = message_id, ack_priority = ack_priority }
     shared_api.send_kafka_bft_smev(data['message_id'])
 
+    local date = shared_api.get_date()
+
     -- В smev_message_recived для сообщения где messageId = message_Id в
     -- start_ack_send_date записывается текущее датавремя
-    local _, err = crud.update('smev_message_recived', data['message_id'], {{'=', 'start_ack_send_date', shared_api.get_date()}})
+    local _, err = crud.update('smev_message_recived', data['message_id'], {{'=', 'start_ack_send_date', date}})
     if err ~= nil then
         log.info(err)
     end
@@ -120,7 +122,7 @@ local function saveSMEVMessage(data)
 
     -- В smev_message_recived для сообщения где messageId = message_Id
     -- в start_processing_date записывается текущее датавремя
-    local _, err = crud.update('smev_message_recived', data['message_id'], {{'=', 'start_processing_date', shared_api.get_date()}})
+    local _, err = crud.update('smev_message_recived', data['message_id'], {{'=', 'start_processing_date', date}})
     if err ~= nil then
         log.info(err)
     end
@@ -162,9 +164,10 @@ end
 -- в ack_response_xml_guid записывается xmlRef, в end_ack_send_date
 -- записывается текущее дата и время, значение ack_send_error обнуляется
 local function endAckSending(data)
+    local date = shared_api.get_date()
     local _, err = crud.update('smev_message_recived', data['message_id'], {
         {'=', 'ack_response_xml_guid', data['ack_response_xml_guid']},
-        {'=', 'end_ack_send_date', shared_api.get_date()},
+        {'=', 'end_ack_send_date', date},
         {'=', 'ack_send_error', ""}})
     if err ~= nil then
         log.info(err)
