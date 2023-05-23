@@ -14,3 +14,9 @@ include:
 
 variables: 
   HELM_SECURITY_PATCH: 'false'
+
+# jobs
+deploy logs:
+  allow_failure: true
+  rules:
+    - when: never
