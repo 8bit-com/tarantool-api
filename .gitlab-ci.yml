@@ -6,7 +6,7 @@ include:
       # - '_group.deploy.yaml'
 
   - project: 'ecp/iis/iis-templates'
-    ref:  master
+    ref: master
     file:
       - 'variables.template.yaml'
       - 'smev.variables.template.yaml'
