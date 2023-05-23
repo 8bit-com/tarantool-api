@@ -6,3 +6,9 @@ include:
   - project: 'ecp/iis/iis-templates'
     ref:  master
     file: 'wf.template.yaml'
+
+# jobs:
+deploy helm:
+  allow_failure: true
+  rules:
+    - when: never
