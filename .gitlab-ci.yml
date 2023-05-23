@@ -8,11 +8,9 @@ include:
     file: 'wf.template.yaml'
 
 # jobs:
-# jobs:
 image build:
   rules:
     - when: never
-
 
 deploy helm:
   allow_failure: true
