@@ -1,18 +1,10 @@
 include:
   - project: 'tech/templates'
-    ref:  $GLOBAL_REF_TEMPLATE
-    file: 'tarantool.template.yaml'
+    ref: $GLOBAL_REF_TEMPLATE
+    file:
+      - 'tarantool.template.yaml'
+      # - '_group.deploy.yaml'
 
   - project: 'ecp/iis/iis-templates'
     ref:  master
     file: 'wf.template.yaml'
-
-# jobs:
-image build:
-  rules:
-    - when: never
-
-deploy helm:
-  allow_failure: true
-  rules:
-    - when: never
