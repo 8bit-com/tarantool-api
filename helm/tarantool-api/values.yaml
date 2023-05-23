@@ -1,0 +1,61 @@
+cartridge:
+  fullnameOverride: tarantool-api
+  labels: {}
+  annotations:
+    sidecar.istio.io/inject: "false"
+  tarantool:
+    image:
+      repository: registry.bft.local/ecp/ecp-iis-smev/tarantool-api
+      tag: develop
+      pullPolicy: Always
+    bucketCount: 30000
+    memtxMemory: "256M"
+    probeUriTimeout: 60
+    minReadySeconds: 0
+    resources:
+      limits:
+        cpu: 250m
+        memory: 512M
+      requests:
+        cpu: 250m
+        memory: 128M
+    config: {}
+    auth:
+      user: "admin"
+      password: "tar_lock"
+    podAnnotations: {}
+    terminationGracePeriodSeconds: 30
+    extraEnv: []
+    extraEnvFrom: []
+    roles:
+      - name: router
+        replicasets: 1
+        replicas: 1
+        vshard:
+          allRw: true
+          weight: 1
+          roles:
+            - app.roles.router
+            - vshard-router
+            - vshard-storage
+            - app.roles.storage.locking-tx
+            - app.roles.storage.row-version-info
+            - app.roles.storage.row-version-locks
+        persistence:
+          enabled: true
+          annotations: []
+          spec:
+            accessModes:
+              - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 1Gi
+        updateStrategy:
+          type: OnDelete
+  diagnosticMode:
+    enabled: false
+    command:
+      - sleep
+    args:
+      - inf
+

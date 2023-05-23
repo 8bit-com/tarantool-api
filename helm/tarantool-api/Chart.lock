@@ -1,0 +1,7 @@
+dependencies:
+- name: cartridge
+  repository: https://tarantool.github.io/helm-charts/
+  version: 1.0.0-rc2
+digest: sha256:685d44c09f4de68abce6024373c5f0f008412c92a2782c8992e637b24a7cb0a2
+generated: "2023-03-01T11:30:45.045780918+03:00"
+

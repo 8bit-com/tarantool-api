@@ -1,13 +1,16 @@
 include:
   - project: 'tech/templates'
-    ref: $GLOBAL_REF_TEMPLATE
+    ref: 0.1.6
     file:
       - 'tarantool.template.yaml'
       # - '_group.deploy.yaml'
 
   - project: 'ecp/iis/iis-templates'
     ref:  master
-    file: 'wf.template.yaml'
+    file:
+      - 'variables.template.yaml'
+      - 'smev.variables.template.yaml'
+      - 'wf.template.yaml'
 
 variables: 
   HELM_SECURITY_PATCH: 'false'
