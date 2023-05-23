@@ -84,7 +84,7 @@ local function send_kafka_bft_smev_adapter_iis_router_service(id)
 end
 
 local function apply_config(config)
-    rawset(_G, 'producer', tnt_kafka.Producer.create({brokers = config.api.kafka_port}))
+    rawset(_G, 'producer', tnt_kafka.Producer.create({brokers = "172.18.32.223:9092"}))
 end
 
 local function init(opts)
