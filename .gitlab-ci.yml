@@ -15,8 +15,15 @@ include:
 variables: 
   HELM_SECURITY_PATCH: 'false'
 
-# jobs
-deploy logs:
-  allow_failure: true
+deploy helm:
   rules:
-    - when: never
+    - if: '$HELM_NAMESPACE =~ /.*ecp-iis-smev.*$/'
+
+restart pods:
+  rules:
+    - if: '$HELM_NAMESPACE =~ /.*ecp-iis-smev.*$/'
+
+cleanup helm:
+  rules:
+    - if: '$HELM_NAMESPACE =~ /.*ecp-iis-smev.*$/'
+      when: manual
