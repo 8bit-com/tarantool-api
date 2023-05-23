@@ -1,0 +1,8 @@
+include:
+  - project: 'tech/templates'
+    ref:  $GLOBAL_REF_TEMPLATE
+    file: 'tarantool.template.yaml'
+
+  - project: 'ecp/iis/iis-templates'
+    ref:  master
+    file: 'wf.template.yaml'
