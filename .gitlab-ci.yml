@@ -3,7 +3,7 @@ include:
     ref: 0.1.6
     file:
       - 'tarantool.template.yaml'
-      # - '_group.deploy.yaml'
+      - '_group.deploy.yaml'
 
   - project: 'ecp/iis/iis-templates'
     ref:  master
