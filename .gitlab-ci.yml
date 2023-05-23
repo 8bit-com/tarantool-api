@@ -8,3 +8,6 @@ include:
   - project: 'ecp/iis/iis-templates'
     ref:  master
     file: 'wf.template.yaml'
+
+variables: 
+  HELM_SECURITY_PATCH: 'false'
