@@ -1,9 +1,39 @@
 commands = {
+   luacheck = {
+      "luacheck/0.26.0-1"
+   },
+   luacov = {
+      "luacov/0.13.0-1"
+   },
+   luatest = {
+      "luatest/0.5.6-1"
+   },
    stateboard = {
       "cartridge/2.7.9-1"
    }
 }
 dependencies = {
+   argparse = {
+      ["0.6.0-1"] = {
+         {
+            constraints = {
+               {
+                  op = ">=",
+                  version = {
+                     5, 1, string = "5.1"
+                  }
+               },
+               {
+                  op = "<",
+                  version = {
+                     5, 4, string = "5.4"
+                  }
+               }
+            },
+            name = "lua"
+         }
+      }
+   },
    cartridge = {
       ["2.7.9-1"] = {
          {
@@ -304,13 +334,66 @@ dependencies = {
       }
    },
    kafka = {
-      ["scm-1"] = {
+      ["1.6.4-1"] = {
          {
             constraints = {
                {
                   op = ">=",
                   version = {
                      5, 1, string = "5.1"
+                  }
+               }
+            },
+            name = "lua"
+         }
+      }
+   },
+   luacheck = {
+      ["0.26.0-1"] = {
+         {
+            constraints = {
+               {
+                  op = ">=",
+                  version = {
+                     5, 1, string = "5.1"
+                  }
+               },
+               {
+                  op = "<",
+                  version = {
+                     5, 4, string = "5.4"
+                  }
+               }
+            },
+            name = "lua"
+         },
+         {
+            constraints = {
+               {
+                  op = ">=",
+                  version = {
+                     0, 6, 0, string = "0.6.0"
+                  }
+               }
+            },
+            name = "argparse"
+         }
+      }
+   },
+   luacov = {
+      ["0.13.0-1"] = {
+         {
+            constraints = {
+               {
+                  op = ">=",
+                  version = {
+                     5, 1, string = "5.1"
+                  }
+               },
+               {
+                  op = "<",
+                  version = {
+                     5, 4, string = "5.4"
                   }
                }
             },
@@ -330,6 +413,32 @@ dependencies = {
                }
             },
             name = "lua"
+         }
+      }
+   },
+   luatest = {
+      ["0.5.6-1"] = {
+         {
+            constraints = {
+               {
+                  op = ">=",
+                  version = {
+                     5, 1, string = "5.1"
+                  }
+               }
+            },
+            name = "lua"
+         },
+         {
+            constraints = {
+               {
+                  op = ">=",
+                  version = {
+                     3, 0, 0, string = "3.0.0"
+                  }
+               }
+            },
+            name = "checks"
          }
       }
    },
@@ -440,6 +549,10 @@ dependencies = {
             name = "icu-date"
          },
          {
+            constraints = {},
+            name = "kafka"
+         },
+         {
             constraints = {
                {
                   op = "==",
@@ -480,6 +593,9 @@ dependencies = {
    }
 }
 modules = {
+   argparse = {
+      "argparse/0.6.0-1"
+   },
    cartridge = {
       "cartridge/2.7.9-1"
    },
@@ -989,16 +1105,325 @@ modules = {
       "icu-date/scm-1"
    },
    ["kafka.init"] = {
-      "kafka/scm-1"
+      "kafka/1.6.4-1"
    },
    ["kafka.tntkafka"] = {
-      "kafka/scm-1"
+      "kafka/1.6.4-1"
    },
-   ["kafka.version"] = {
-      "kafka/scm-1"
+   ["luacheck.builtin_standards.init"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.builtin_standards.love"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.builtin_standards.ngx"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.builtin_standards.tarantool"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.cache"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.check"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.check_state"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.config"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.core_utils"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.decoder"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.expand_rockspec"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.filter"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.format"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.formatter.default"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.formatter.junit"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.formatter.plain"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.formatter.sonar"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.formatter.tap"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.formatter.visual_studio"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.fs"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.fs_adapter"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.globbing"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.init"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.lexer"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.main"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.multithreading"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.options"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.parser"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.profiler"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.runner"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.serializer"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.detect_bad_whitespace"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.detect_cyclomatic_complexity"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.detect_empty_blocks"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.detect_empty_statements"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.detect_globals"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.detect_reversed_fornum_loops"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.detect_unbalanced_assignments"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.detect_uninit_accesses"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.detect_unreachable_code"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.detect_unused_fields"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.detect_unused_locals"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.init"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.linearize"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.name_functions"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.parse"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.parse_inline_options"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.resolve_locals"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.stages.unwrap_parens"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.standards"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.unicode"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.unicode_printability_boundaries"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.utils"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.vendor.sha1.bit32_ops"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.vendor.sha1.bit_ops"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.vendor.sha1.common"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.vendor.sha1.init"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.vendor.sha1.lua53_ops"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.vendor.sha1.pure_lua_ops"] = {
+      "luacheck/0.26.0-1"
+   },
+   ["luacheck.version"] = {
+      "luacheck/0.26.0-1"
+   },
+   luacov = {
+      "luacov/0.13.0-1"
+   },
+   ["luacov.defaults"] = {
+      "luacov/0.13.0-1"
+   },
+   ["luacov.hook"] = {
+      "luacov/0.13.0-1"
+   },
+   ["luacov.linescanner"] = {
+      "luacov/0.13.0-1"
+   },
+   ["luacov.reporter"] = {
+      "luacov/0.13.0-1"
+   },
+   ["luacov.reporter.default"] = {
+      "luacov/0.13.0-1"
+   },
+   ["luacov.runner"] = {
+      "luacov/0.13.0-1"
+   },
+   ["luacov.stats"] = {
+      "luacov/0.13.0-1"
+   },
+   ["luacov.tick"] = {
+      "luacov/0.13.0-1"
+   },
+   ["luacov.util"] = {
+      "luacov/0.13.0-1"
    },
    luagraphqlparser = {
       "luagraphqlparser/0.2.0-1"
+   },
+   ["luarocks.test.luatest"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.VERSION"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.assertions"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.capture"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.capturing"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.class"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.cli_entrypoint"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.comparator"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.coverage"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.coverage_utils"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.ffi_io"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.group"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.helpers"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.hooks"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.http_response"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.init"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.loader"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.mismatch_formatter"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.monitor"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.output.generic"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.output.junit"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.output.nil"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.output.tap"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.output.text"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.output_beautifier"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.parametrizer"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.pp"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.process"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.runner"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.sandboxed_runner"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.server"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.sorted_pairs"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.test_instance"] = {
+      "luatest/0.5.6-1"
+   },
+   ["luatest.utils"] = {
+      "luatest/0.5.6-1"
    },
    membership = {
       "membership/2.4.0-1"
@@ -1176,6 +1601,18 @@ modules = {
    }
 }
 repository = {
+   argparse = {
+      ["0.6.0-1"] = {
+         {
+            arch = "installed",
+            commands = {},
+            dependencies = {},
+            modules = {
+               argparse = "argparse.lua"
+            }
+         }
+      }
+   },
    cartridge = {
       ["2.7.9-1"] = {
          {
@@ -1482,15 +1919,112 @@ repository = {
       }
    },
    kafka = {
-      ["scm-1"] = {
+      ["1.6.4-1"] = {
          {
             arch = "installed",
             commands = {},
             dependencies = {},
             modules = {
                ["kafka.init"] = "kafka/init.lua",
-               ["kafka.tntkafka"] = "kafka/tntkafka.so",
-               ["kafka.version"] = "kafka/version.lua"
+               ["kafka.tntkafka"] = "kafka/tntkafka.so"
+            }
+         }
+      }
+   },
+   luacheck = {
+      ["0.26.0-1"] = {
+         {
+            arch = "installed",
+            commands = {
+               luacheck = "luacheck"
+            },
+            dependencies = {
+               argparse = "0.6.0-1"
+            },
+            modules = {
+               ["luacheck.builtin_standards.init"] = "luacheck/builtin_standards/init.lua",
+               ["luacheck.builtin_standards.love"] = "luacheck/builtin_standards/love.lua",
+               ["luacheck.builtin_standards.ngx"] = "luacheck/builtin_standards/ngx.lua",
+               ["luacheck.builtin_standards.tarantool"] = "luacheck/builtin_standards/tarantool.lua",
+               ["luacheck.cache"] = "luacheck/cache.lua",
+               ["luacheck.check"] = "luacheck/check.lua",
+               ["luacheck.check_state"] = "luacheck/check_state.lua",
+               ["luacheck.config"] = "luacheck/config.lua",
+               ["luacheck.core_utils"] = "luacheck/core_utils.lua",
+               ["luacheck.decoder"] = "luacheck/decoder.lua",
+               ["luacheck.expand_rockspec"] = "luacheck/expand_rockspec.lua",
+               ["luacheck.filter"] = "luacheck/filter.lua",
+               ["luacheck.format"] = "luacheck/format.lua",
+               ["luacheck.formatter.default"] = "luacheck/formatter/default.lua",
+               ["luacheck.formatter.junit"] = "luacheck/formatter/junit.lua",
+               ["luacheck.formatter.plain"] = "luacheck/formatter/plain.lua",
+               ["luacheck.formatter.sonar"] = "luacheck/formatter/sonar.lua",
+               ["luacheck.formatter.tap"] = "luacheck/formatter/tap.lua",
+               ["luacheck.formatter.visual_studio"] = "luacheck/formatter/visual_studio.lua",
+               ["luacheck.fs"] = "luacheck/fs.lua",
+               ["luacheck.fs_adapter"] = "luacheck/fs_adapter.lua",
+               ["luacheck.globbing"] = "luacheck/globbing.lua",
+               ["luacheck.init"] = "luacheck/init.lua",
+               ["luacheck.lexer"] = "luacheck/lexer.lua",
+               ["luacheck.main"] = "luacheck/main.lua",
+               ["luacheck.multithreading"] = "luacheck/multithreading.lua",
+               ["luacheck.options"] = "luacheck/options.lua",
+               ["luacheck.parser"] = "luacheck/parser.lua",
+               ["luacheck.profiler"] = "luacheck/profiler.lua",
+               ["luacheck.runner"] = "luacheck/runner.lua",
+               ["luacheck.serializer"] = "luacheck/serializer.lua",
+               ["luacheck.stages.detect_bad_whitespace"] = "luacheck/stages/detect_bad_whitespace.lua",
+               ["luacheck.stages.detect_cyclomatic_complexity"] = "luacheck/stages/detect_cyclomatic_complexity.lua",
+               ["luacheck.stages.detect_empty_blocks"] = "luacheck/stages/detect_empty_blocks.lua",
+               ["luacheck.stages.detect_empty_statements"] = "luacheck/stages/detect_empty_statements.lua",
+               ["luacheck.stages.detect_globals"] = "luacheck/stages/detect_globals.lua",
+               ["luacheck.stages.detect_reversed_fornum_loops"] = "luacheck/stages/detect_reversed_fornum_loops.lua",
+               ["luacheck.stages.detect_unbalanced_assignments"] = "luacheck/stages/detect_unbalanced_assignments.lua",
+               ["luacheck.stages.detect_uninit_accesses"] = "luacheck/stages/detect_uninit_accesses.lua",
+               ["luacheck.stages.detect_unreachable_code"] = "luacheck/stages/detect_unreachable_code.lua",
+               ["luacheck.stages.detect_unused_fields"] = "luacheck/stages/detect_unused_fields.lua",
+               ["luacheck.stages.detect_unused_locals"] = "luacheck/stages/detect_unused_locals.lua",
+               ["luacheck.stages.init"] = "luacheck/stages/init.lua",
+               ["luacheck.stages.linearize"] = "luacheck/stages/linearize.lua",
+               ["luacheck.stages.name_functions"] = "luacheck/stages/name_functions.lua",
+               ["luacheck.stages.parse"] = "luacheck/stages/parse.lua",
+               ["luacheck.stages.parse_inline_options"] = "luacheck/stages/parse_inline_options.lua",
+               ["luacheck.stages.resolve_locals"] = "luacheck/stages/resolve_locals.lua",
+               ["luacheck.stages.unwrap_parens"] = "luacheck/stages/unwrap_parens.lua",
+               ["luacheck.standards"] = "luacheck/standards.lua",
+               ["luacheck.unicode"] = "luacheck/unicode.lua",
+               ["luacheck.unicode_printability_boundaries"] = "luacheck/unicode_printability_boundaries.lua",
+               ["luacheck.utils"] = "luacheck/utils.lua",
+               ["luacheck.vendor.sha1.bit32_ops"] = "luacheck/vendor/sha1/bit32_ops.lua",
+               ["luacheck.vendor.sha1.bit_ops"] = "luacheck/vendor/sha1/bit_ops.lua",
+               ["luacheck.vendor.sha1.common"] = "luacheck/vendor/sha1/common.lua",
+               ["luacheck.vendor.sha1.init"] = "luacheck/vendor/sha1/init.lua",
+               ["luacheck.vendor.sha1.lua53_ops"] = "luacheck/vendor/sha1/lua53_ops.lua",
+               ["luacheck.vendor.sha1.pure_lua_ops"] = "luacheck/vendor/sha1/pure_lua_ops.lua",
+               ["luacheck.version"] = "luacheck/version.lua"
+            }
+         }
+      }
+   },
+   luacov = {
+      ["0.13.0-1"] = {
+         {
+            arch = "installed",
+            commands = {
+               luacov = "luacov"
+            },
+            dependencies = {},
+            modules = {
+               luacov = "luacov.lua",
+               ["luacov.defaults"] = "luacov/defaults.lua",
+               ["luacov.hook"] = "luacov/hook.lua",
+               ["luacov.linescanner"] = "luacov/linescanner.lua",
+               ["luacov.reporter"] = "luacov/reporter.lua",
+               ["luacov.reporter.default"] = "luacov/reporter/default.lua",
+               ["luacov.runner"] = "luacov/runner.lua",
+               ["luacov.stats"] = "luacov/stats.lua",
+               ["luacov.tick"] = "luacov/tick.lua",
+               ["luacov.util"] = "luacov/util.lua"
             }
          }
       }
@@ -1503,6 +2037,55 @@ repository = {
             dependencies = {},
             modules = {
                luagraphqlparser = "luagraphqlparser.so"
+            }
+         }
+      }
+   },
+   luatest = {
+      ["0.5.6-1"] = {
+         {
+            arch = "installed",
+            commands = {
+               luatest = "luatest"
+            },
+            dependencies = {
+               checks = "3.2.0-1"
+            },
+            modules = {
+               ["luarocks.test.luatest"] = "luarocks/test/luatest.lua",
+               ["luatest.VERSION"] = "luatest/VERSION.lua",
+               ["luatest.assertions"] = "luatest/assertions.lua",
+               ["luatest.capture"] = "luatest/capture.lua",
+               ["luatest.capturing"] = "luatest/capturing.lua",
+               ["luatest.class"] = "luatest/class.lua",
+               ["luatest.cli_entrypoint"] = "luatest/cli_entrypoint.lua",
+               ["luatest.comparator"] = "luatest/comparator.lua",
+               ["luatest.coverage"] = "luatest/coverage.lua",
+               ["luatest.coverage_utils"] = "luatest/coverage_utils.lua",
+               ["luatest.ffi_io"] = "luatest/ffi_io.lua",
+               ["luatest.group"] = "luatest/group.lua",
+               ["luatest.helpers"] = "luatest/helpers.lua",
+               ["luatest.hooks"] = "luatest/hooks.lua",
+               ["luatest.http_response"] = "luatest/http_response.lua",
+               ["luatest.init"] = "luatest/init.lua",
+               ["luatest.loader"] = "luatest/loader.lua",
+               ["luatest.mismatch_formatter"] = "luatest/mismatch_formatter.lua",
+               ["luatest.monitor"] = "luatest/monitor.lua",
+               ["luatest.output.generic"] = "luatest/output/generic.lua",
+               ["luatest.output.junit"] = "luatest/output/junit.lua",
+               ["luatest.output.nil"] = "luatest/output/nil.lua",
+               ["luatest.output.tap"] = "luatest/output/tap.lua",
+               ["luatest.output.text"] = "luatest/output/text.lua",
+               ["luatest.output_beautifier"] = "luatest/output_beautifier.lua",
+               ["luatest.parametrizer"] = "luatest/parametrizer.lua",
+               ["luatest.pp"] = "luatest/pp.lua",
+               ["luatest.process"] = "luatest/process.lua",
+               ["luatest.runner"] = "luatest/runner.lua",
+               ["luatest.sandboxed_runner"] = "luatest/sandboxed_runner.lua",
+               ["luatest.server"] = "luatest/server.lua",
+               ["luatest.sorted_pairs"] = "luatest/sorted_pairs.lua",
+               ["luatest.test_instance"] = "luatest/test_instance.lua",
+               ["luatest.utils"] = "luatest/utils.lua"
             }
          }
       }
@@ -1584,7 +2167,7 @@ repository = {
             dependencies = {
                cartridge = "2.7.9-1",
                ["cartridge-cli-extensions"] = "1.1.1-1",
-               checks = "3.1.0-1",
+               checks = "3.2.0-1",
                crud = "1.0.0-1",
                ddl = "1.6.2-1",
                errors = "2.2.1-1",
@@ -1592,6 +2175,7 @@ repository = {
                graphql = "0.2.0-1",
                http = "1.4.0-1",
                ["icu-date"] = "scm-1",
+               kafka = "1.6.4-1",
                luagraphqlparser = "0.2.0-1",
                membership = "2.4.0-1",
                metrics = "0.16.0-1",

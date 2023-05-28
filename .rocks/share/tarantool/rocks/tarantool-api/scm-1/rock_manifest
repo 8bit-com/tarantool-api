@@ -2,5 +2,5 @@ rock_manifest = {
    doc = {
       ["README.md"] = "618c9643014de15abb213ce59bb5214f"
    },
-   ["tarantool-api-scm-1.rockspec"] = "b624d12d119cfeb440db198e429ae4e3"
+   ["tarantool-api-scm-1.rockspec"] = "5f104fad95079263af883147cd09285c"
 }
